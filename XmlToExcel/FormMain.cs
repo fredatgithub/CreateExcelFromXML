@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -77,9 +78,9 @@ namespace XmlToExcel
     private void buttonReadXml_Click(object sender, EventArgs e)
     {
       XDocument xmlDoc;
+      string xmlFileName = "sample.xml";
       try
       {
-        string xmlFileName = "sample.xml";
         xmlDoc = XDocument.Load(xmlFileName);
       }
       catch (Exception exception)
@@ -88,18 +89,26 @@ namespace XmlToExcel
         return;
       }
 
+      XmlDocument doc = new XmlDocument();
+      doc.Load(xmlFileName);
       XmlNodeList elemList = doc.GetElementsByTagName("Issue");  
       var listOfIssues = new List<Issue>();
       for (int i = 0; i < elemList.Count; i++)     
       {
         //string attrVal = elemList[i].Attributes["TypeId"].Value;
-        Issue newIssue = newIssue(
-          elemList[i].Attributes["TypeId"].Value,
-          elemList[i].Attributes["File"].Value,
-          elemList[i].Attributes["Offset"].Value,
-          elemList[i].Attributes["Line"].Value,
-          elemList[i].Attributes["Message"].Value);
+        var attributes = elemList[i].Attributes;
+        if (attributes != null)
+        {
+          var lineNumber = 0;
+          int.TryParse(attributes["Line"].Value, out lineNumber);
+          Issue newIssue = new Issue(
+            attributes["TypeId"].Value,
+            attributes["File"].Value,
+            attributes["Offset"].Value,
+            lineNumber,
+            attributes["Message"].Value);
           listOfIssues.Add(newIssue);
+        }
       }
 
       // var result = from node in xmlDoc.Descendants("Issue")
