@@ -88,31 +88,45 @@ namespace XmlToExcel
         return;
       }
 
-      var result = from node in xmlDoc.Descendants("Issue")
-                   where node.HasElements
-                   let xElementAuthor = node.Element("Author")
-                   where xElementAuthor != null
-                   let xElementLanguage = node.Element("Language")
-                   where xElementLanguage != null
-                   let xElementQuote = node.Element("QuoteValue")
-                   where xElementQuote != null
-                   select new
-                   {
-                     authorValue = xElementAuthor.Value,
-                     languageValue = xElementLanguage.Value,
-                     sentenceValue = xElementQuote.Value
-                   };
-
-      foreach (var q in result)
+      XmlNodeList elemList = doc.GetElementsByTagName("Issue");  
+      var listOfIssues = new List<Issue>();
+      for (int i = 0; i < elemList.Count; i++)     
       {
-        if (!_allQuotes.ListOfQuotes.Contains(new Quote(q.authorValue, q.languageValue, q.sentenceValue)) &&
-            q.authorValue != string.Empty && q.languageValue != string.Empty && q.sentenceValue != string.Empty)
-        {
-          _allQuotes.Add(new Quote(q.authorValue, q.languageValue, q.sentenceValue));
-        }
+        //string attrVal = elemList[i].Attributes["TypeId"].Value;
+        Issue newIssue = newIssue(
+          elemList[i].Attributes["TypeId"].Value,
+          elemList[i].Attributes["File"].Value,
+          elemList[i].Attributes["Offset"].Value,
+          elemList[i].Attributes["Line"].Value,
+          elemList[i].Attributes["Message"].Value);
+          listOfIssues.Add(newIssue);
       }
 
-      _allQuotes.QuoteFileSaved = true;
+      // var result = from node in xmlDoc.Descendants("Issue")
+      //              where node.HasElements
+      //              let xElementAuthor = node.Element("Author")
+      //              where xElementAuthor != null
+      //              let xElementLanguage = node.Element("Language")
+      //              where xElementLanguage != null
+      //              let xElementQuote = node.Element("QuoteValue")
+      //              where xElementQuote != null
+      //              select new
+      //              {
+      //                authorValue = xElementAuthor.Value,
+      //                languageValue = xElementLanguage.Value,
+      //                sentenceValue = xElementQuote.Value
+      //              };
+
+      // foreach (var q in result)
+      // {
+      //   if (!_allQuotes.ListOfQuotes.Contains(new Quote(q.authorValue, q.languageValue, q.sentenceValue)) &&
+      //       q.authorValue != string.Empty && q.languageValue != string.Empty && q.sentenceValue != string.Empty)
+      //   {
+      //     _allQuotes.Add(new Quote(q.authorValue, q.languageValue, q.sentenceValue));
+      //   }
+      // }
+
+      // _allQuotes.QuoteFileSaved = true;
     }
   }
 }
