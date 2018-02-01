@@ -93,8 +93,17 @@ namespace XmlToExcel
       XmlDocument doc = new XmlDocument();
       doc.Load(xmlFileName);
       XmlNodeList elemList = doc.GetElementsByTagName("Issue");
+      //var items1 = from item in xmlDoc.Descendants("Issues")
+      //             select new
+      //             {
+      //               TypeId = (string)item.Attribute("TypeId"),
+      //               FileName = (string)item.Attribute("File"),
+      //               Offset = (string)item.Attribute("Offset"),
+      //               lineNumber = (int)item.Attribute("Line"),
+      //               Message = (string)item.Attribute("Message")
+      //             };
 
-      var items = from item in xmlDoc.Descendants("Project").Elements("Issue")
+      var items = from item in xmlDoc.Descendants("Issues").Elements("Issue")
                   where item.HasAttributes
                   where item.HasElements
                   select new
