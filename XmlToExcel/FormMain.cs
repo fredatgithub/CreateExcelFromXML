@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using System.Xml.Linq;
 using XmlToExcel.Properties;
@@ -75,7 +76,7 @@ namespace XmlToExcel
       }
     }
 
-    private void buttonReadXml_Click(object sender, EventArgs e)
+    private void ButtonReadXml_Click(object sender, EventArgs e)
     {
       XDocument xmlDoc;
       string xmlFileName = "sample.xml";
@@ -91,41 +92,23 @@ namespace XmlToExcel
 
       XmlDocument doc = new XmlDocument();
       doc.Load(xmlFileName);
-      XmlNodeList elemList = doc.GetElementsByTagName("Issue");  
-      var listOfIssues = new List<Issue>();
-      for (int i = 0; i < elemList.Count; i++)     
-      {
-        //string attrVal = elemList[i].Attributes["TypeId"].Value;
-        var attributes = elemList[i].Attributes;
-        if (attributes != null)
-        {
-          var lineNumber = 0;
-          int.TryParse(attributes["Line"].Value, out lineNumber);
-          Issue newIssue = new Issue(
-            attributes["TypeId"].Value,
-            attributes["File"].Value,
-            attributes["Offset"].Value,
-            lineNumber,
-            attributes["Message"].Value);
-          listOfIssues.Add(newIssue);
-        }
-      }
+      XmlNodeList elemList = doc.GetElementsByTagName("Issue");
 
-      // var result = from node in xmlDoc.Descendants("Issue")
-      //              where node.HasElements
-      //              let xElementAuthor = node.Element("Author")
-      //              where xElementAuthor != null
-      //              let xElementLanguage = node.Element("Language")
-      //              where xElementLanguage != null
-      //              let xElementQuote = node.Element("QuoteValue")
-      //              where xElementQuote != null
-      //              select new
-      //              {
-      //                authorValue = xElementAuthor.Value,
-      //                languageValue = xElementLanguage.Value,
-      //                sentenceValue = xElementQuote.Value
-      //              };
+      var items = from item in xmlDoc.Descendants("Project").Elements("Issue")
+                  where item.HasAttributes
+                  where item.HasElements
+                  select new
+                  {
+                    TypeId = (string)item.Attribute("TypeId"),
+                    FileName = (string)item.Attribute("File"),
+                    Offset = (string)item.Attribute("Offset"),
+                    lineNumber = (int)item.Attribute("Line"),
+                    Message = (string)item.Attribute("Message")
+                  };
 
+      var listOfIssues = items.Select(item => new Issue(item.TypeId, item.FileName, item.Offset, item.lineNumber, item.Message)).ToList();
+
+      var numberOfIssuesfound = listOfIssues.Count;
       // foreach (var q in result)
       // {
       //   if (!_allQuotes.ListOfQuotes.Contains(new Quote(q.authorValue, q.languageValue, q.sentenceValue)) &&

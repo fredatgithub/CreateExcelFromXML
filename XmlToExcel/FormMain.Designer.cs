@@ -35,7 +35,7 @@
       // buttonCreateExcel
       // 
       this.buttonCreateExcel.Location = new System.Drawing.Point(60, 57);
-      this.buttonCreateExcel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.buttonCreateExcel.Margin = new System.Windows.Forms.Padding(2);
       this.buttonCreateExcel.Name = "buttonCreateExcel";
       this.buttonCreateExcel.Size = new System.Drawing.Size(83, 28);
       this.buttonCreateExcel.TabIndex = 0;
@@ -52,18 +52,18 @@
       this.buttonReadXml.TabIndex = 1;
       this.buttonReadXml.Text = "Read Xml";
       this.buttonReadXml.UseVisualStyleBackColor = true;
-      this.buttonReadXml.Click += new System.EventHandler(this.buttonReadXml_Click);
+      this.buttonReadXml.Click += new System.EventHandler(this.ButtonReadXml_Click);
       // 
       // FormMain
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(517, 191);
+      this.ClientSize = new System.Drawing.Size(348, 129);
       this.Controls.Add(this.buttonReadXml);
       this.Controls.Add(this.buttonCreateExcel);
-      this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+      this.Margin = new System.Windows.Forms.Padding(2);
       this.Name = "FormMain";
-      this.Text = "Form1";
+      this.Text = "XML to Excel";
       this.ResumeLayout(false);
 
         }
